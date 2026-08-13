@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki Rock Universal | Biografías de bandas de rock</title>
+    <meta name="description" content="Wiki Rock Universal reúne biografías, álbumes y contenido sobre bandas de rock como Slipknot, Breaking Benjamin y Deftones.">
+    <meta name="keywords" content="rock, biografías de bandas, Slipknot, Breaking Benjamin, Deftones, metal alternativo">
+    <meta name="robots" content="index,follow">
+    <link rel="stylesheet" href="estilo.css">
+    <meta name="google-site-verification" content="TzbtlQX3VtJp3w8FMFwQKZI6X-6Jp7TnGPWYwMjxvW4" />
+    <link rel="icon" href="img/icono_para_El_sitio_web.png" sizes="any">
+    <style>
+        body.portal {
+            --accent: #38bdf8;
+            --accent-dark: #0ea5e9;
+            --intro-heading: #38bdf8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .portal-box {
+            text-align: center;
+            width: min(520px, 100%);
+        }
+
+        .portal-box h1 {
+            margin: 0 0 32px;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            letter-spacing: 0.04em;
+            color: #f8fafc;
+        }
+
+        #resultados {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        #resultados li {
+            margin-bottom: 8px;
+        }
+
+        #resultados a {
+            display: block;
+            padding: 10px 12px;
+            background: #1e293b;
+            border-radius: 8px;
+            color: #7dd3fc;
+            text-decoration: none;
+        }
+
+        #resultados a:hover {
+            background: #334155;
+        }
+
+        #mensaje {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            min-height: 1.2em;
+        }
+      /* --- CONTENEDOR DEL BUSCADOR (INPUT + BOTÓN) --- */
+.search-box--hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px auto;
+    width: 100%;
+}
+
+/* --- ESTILO DEL INPUT DE BÚSQUEDA --- */
+#buscar {
+    background-color: #1e293b;       /* Gris azulado oscuro que hace juego con tus resultados */
+    color: #f8fafc;                  /* Texto blanco roto */
+    border: 2px solid #334155;       /* Borde sutil */
+    border-radius: 50px;             /* Bordes redondeados estilo píldora */
+    padding: 14px 24px;              /* Espaciado interno cómodo */
+    font-size: 16px;
+    width: 100%;                     /* Ocupa el ancho disponible */
+    max-width: 340px;                /* Límite de ancho */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animación de expansión fluida */
+    outline: none;                   /* Elimina el contorno azul por defecto */
+}
+
+/* Efecto cuando haces clic para escribir */
+#buscar:focus {
+    border-color: var(--accent, #38bdf8); /* Usa tu color de acento azul */
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); /* Brillo neón azul suave */
+    max-width: 380px;                /* Se expande sutilmente de forma elegante */
+}
+
+/* Color del texto sugerido (Placeholder) */
+#buscar::placeholder {
+    color: #64748b;
+    font-style: italic;
+}
+
+/* Quita la "X" por defecto que ponen algunos navegadores en inputs de tipo search */
+#buscar::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+}
+
+/* --- ESTILO DEL BOTÓN BUSCAR --- */
+.search-btn {
+    background-color: var(--accent, #38bdf8);
+    color: #0f172a;                  /* Texto oscuro para que contraste perfectamente con el azul */
+    border: none;
+    border-radius: 50px;             /* Mismo redondeado para que encajen visualmente */
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 700;                /* Texto bien marcado */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto cuando pasas el mouse por encima del botón */
+.search-btn:hover {
+    background-color: var(--accent-dark, #0ea5e9);
+    color: #ffffff;                  /* Cambia a texto blanco al hacer hover */
+    transform: translateY(-2px);     /* Pequeño salto hacia arriba */
+    box-shadow: 0 6px 12px rgba(56, 189, 248, 0.3);
+}
+
+/* Efecto cuando presionas el botón */
+.search-btn:active {
+    transform: translateY(1px);      /* Se hunde al darle clic */
+}
+
+/* --- DETALLE EXTRA: Separación de la lista de resultados --- */
+#resultados {
+    margin-top: 16px !important;     /* Le da aire entre el mensaje y las tarjetas */
+}  
+    </style>
+</head>
+<body class="portal theme-bb">
+    <div class="portal-box">
+        <h1>Wiki Rock Universal</h1>
+
+        <div class="search-box search-box--hero">
+            <input type="search" id="buscar" placeholder="Buscar banda..." autocomplete="off">
+            <button type="button" class="search-btn" id="btnBuscar">Buscar</button>
+        </div>
+
+        <p id="mensaje" style="margin-top: 1rem;"></p>
+        <ul id="resultados"></ul>
+    </div>
+
+    <script>
+        const bandas = [
+            { nombre: "Breaking Benjamin", pagina: "/Breaking_Benjamin", palabras: "breaking benjamin rock alternativo" },
+            { nombre: "Slipknot", pagina: "/slipknot", palabras: "slipknot metal nu metal corey taylor" },
+            { nombre: "Deftones", pagina: "/deftones", palabras: "deftones rock experimental metal alternativo" },
+            { nombre: "Chevelle", pagina: "/chevelle", palabras: "chevelle rock alternativo" },
+            { nombre: "Linkin Park", pagina: "/linkin_park", palabras: "linkin park rock" },
+            { nombre: "Three Days Grace", pagina: "/three_days_grace", palabras: "three days grace rock" }
+        ];
+
+        const input = document.getElementById("buscar");
+        const lista = document.getElementById("resultados");
+        const mensaje = document.getElementById("mensaje");
+        const btn = document.getElementById("btnBuscar");
+
+        function buscar() {
+            const texto = input.value.trim().toLowerCase();
+            lista.innerHTML = "";
+
+            if (!texto) {
+                mensaje.textContent = "Escribí el nombre de una banda.";
+                return;
+            }
+            
+            const encontradas = bandas.filter((b) =>
+                b.nombre.toLowerCase().includes(texto) ||
+                b.palabras.includes(texto)
+            );
+
+            if (!encontradas.length) {
+                mensaje.textContent = "No hay bandas con ese nombre en el sitio.";
+                return;
+            }
+
+            mensaje.textContent = encontradas.length === 1
+                ? "1 banda encontrada:"
+                : encontradas.length + " bandas encontradas:";
+
+            encontradas.forEach((banda) => {
+                const li = document.createElement("li");
+                if (banda.pagina) {
+                    const enlace = document.createElement("a");
+                    enlace.href = banda.pagina;
+                    enlace.textContent = banda.nombre;
+                    li.appendChild(enlace);
+                } else {
+                    li.textContent = banda.nombre + " (próximamente)";
+                    li.style.padding = "10px 12px";
+                    li.style.background = "#1e293b";
+                    li.style.borderRadius = "8px";
+                    li.style.color = "#94a3b8";
+                }
+                lista.appendChild(li);
+            });
+        }
+
+        btn.addEventListener("click", buscar);
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                buscar();
+            }
+        });
+        input.addEventListener("input", buscar);    
+    </script>
+
+    <!--En caso de que el usuario quiera iniciar sesion o registrarse-->
+    <div class="iniciar-sesion">
+        <a href="/iniciar_sesion">Iniciar sesión </a>
+        <h1>si no tienes una cuenta, registrate</h1>
+        <a href="/registrarse">Registrarse</a>
+    </div>
+    
+    <!--fin del caso de que el usuario quiera iniciar sesion o registrarse-->
+    
+</body>
+</html>
