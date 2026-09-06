@@ -3,89 +3,82 @@ var router = express.Router();
 var md5 = require('md5');
 var loginModel = require('../../models/admin/loginModel');
 
-router.get('/login', function(req, res, next) {
+router.get('/login', function(req, res) {
   res.render('iniciar_sesion', { error: null });
 });
 
-router.post('/login', async function(req, res, next) {
-  var username = (req.body.username || '').trim();
-  var password = (req.body.password || '').trim();
+router.post('/iniciar_sesion', function(req, res) {
+  var usuario = req.body.username;
+  var password = req.body.password;
 
-  console.log('Intento de login:', {
-    usuario: username,
-    fecha: new Date().toLocaleString()
-  });
-  console.log('Datos enviados desde formulario:', req.body);
+  console.log('Intento de login');
+  console.log('Usuario ingresado:', usuario);
+  console.log('Password ingresada:', password);
 
-  if (!username || !password) {
-    console.log('Login rechazado por datos vacíos');
+  if (!usuario || !password) {
+    console.log('Faltan datos');
     return res.status(400).render('iniciar_sesion', {
-      error: 'Debes completar usuario y contraseña.'
+      error: 'Debes completar todos los campos.'
     });
   }
 
   var passwordHash = md5(password);
-  console.log('Password enviada:', password);
   console.log('Password en MD5:', passwordHash);
 
-  try {
-    var rows = await loginModel.findUserByUsernameAndPassword(username, passwordHash);
-    console.log('Usuario encontrado en BD:', rows);
+  loginModel.findUserByUsernameAndPassword(usuario, passwordHash)
+    .then(function(rows) {
+      console.log('Resultado de la consulta:', rows);
 
-    if (rows && rows.length > 0) {
-      console.log('Usuario autenticado correctamente:', {
-        id: rows[0].id,
-        usuario: rows[0].usuario,
-        passwordHash: rows[0].contraseña
+      if (rows.length > 0) {
+        console.log('Login correcto para:', usuario);
+        return res.redirect('/');
+      }
+
+      console.log('Login incorrecto para:', usuario);
+      return res.status(401).render('iniciar_sesion', {
+        error: 'Usuario o contraseña incorrectos.'
       });
-      return res.redirect('/');
-    }
-
-    console.log('Login fallido para usuario:', username);
-    return res.status(401).render('iniciar_sesion', {
-      error: 'Usuario o contraseña incorrectos.'
+    })
+    .catch(function(error) {
+      console.log('Error al buscar usuario:', error);
+      return res.status(500).send('Hubo un error en el login');
     });
-  } catch (error) {
-    console.error('Error en login:', error);
-    return next(error);
-  }
 });
 
-router.get('/register', function(req, res, next) {
+router.get('/register', function(req, res) {
   res.render('registrarse', { error: null, success: null });
 });
 
-router.post('/register', async function(req, res, next) {
-  var username = (req.body.username || '').trim();
-  var password = (req.body.password || '').trim();
+router.post('/register', function(req, res) {
+  var usuario = req.body.username;
+  var password = req.body.password;
 
-  console.log('Intento de registro:', {
-    usuario: username,
-    fecha: new Date().toLocaleString()
-  });
+  console.log('Intento de registro');
+  console.log('Usuario a registrar:', usuario);
 
-  if (!username || !password) {
-    console.log('Registro rechazado por datos vacíos');
+  if (!usuario || !password) {
+    console.log('Faltan datos para registrar');
     return res.status(400).render('registrarse', {
-      error: 'Debes completar formulario.',
+      error: 'Debes completar todos los campos.',
       success: null
     });
   }
 
   var passwordHash = md5(password);
-  console.log('Password guardada en MD5:', passwordHash);
+  console.log('Password en MD5 para guardar:', passwordHash);
 
-  try {
-    await loginModel.createUser(username, passwordHash);
-    console.log('Usuario registrado correctamente:', username);
-    return res.render('registrarse', {
-      error: null,
-      success: 'Usuario registrado correctamente.'
+  loginModel.createUser(usuario, passwordHash)
+    .then(function() {
+      console.log('Usuario registrado correctamente:', usuario);
+      return res.render('registrarse', {
+        error: null,
+        success: 'Usuario registrado correctamente.'
+      });
+    })
+    .catch(function(error) {
+      console.log('Error al registrar:', error);
+      return res.status(500).send('Hubo un error al registrar');
     });
-  } catch (error) {
-    console.error('Error al registrar usuario:', error);
-    return next(error);
-  }
 });
 
 module.exports = router;
