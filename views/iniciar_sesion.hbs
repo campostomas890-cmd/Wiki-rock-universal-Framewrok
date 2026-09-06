@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio sesion / Wiki Rock Universal</title>
-    <meta name="description" content="Inicio sesion en Wiki Rock Universal">
-    <meta name="keywords" content="Wiki Rock Universal, Inicio sesion, Registro de usuarios">
+    <title>Iniciar sesión / Wiki Rock Universal</title>
+    <meta name="description" content="Iniciar sesión en Wiki Rock Universal">
+    <meta name="keywords" content="Wiki Rock Universal, inicio de sesión, registro de usuarios">
     <meta name="author" content="Tomás Andrés Campos">
-    <meta property="og:title" content="Inicio sesion / Wiki Rock Universal">
-    <meta property="og:description" content="Inicio sesion en Wiki Rock Universal">
+    <meta property="og:title" content="Iniciar sesión / Wiki Rock Universal">
+    <meta property="og:description" content="Iniciar sesión en Wiki Rock Universal">
     <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/4/42/Corey_Taylor_%282019%29.jpg">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="inicio_sesion.css">
+    <link rel="stylesheet" href="/inicio_sesion.css">
 </head>
 <body class="contenedor-pantalla-rock">
 
     <div class="contenedor-rock">
         <h1 class="titulo-rock">Wiki Rock Universal</h1>
-        
-        <form>
+
+        <form action="/iniciar_sesion" method="post">
+            {{#if error}}
+                <div class="alert alert-danger" role="alert" style="color: #fff; background: rgba(220, 53, 69, 0.7); padding: 10px; border-radius: 10px; margin-bottom: 16px;">
+                    {{error}}
+                </div>
+            {{/if}}
+
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Nombre de usuario</label>
-                <input type="Nombre de usuario" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label for="username" class="form-label">Nombre de usuario</label>
+                <input type="text" class="form-control" id="username" name="username" aria-describedby="emailHelp" required>
                 <div id="emailHelp" class="form-text">Nunca compartiremos tus datos con nadie.</div>
             </div>
-            
+
             <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            
+
             <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Recordar</label>
+                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                <label class="form-check-label" for="remember">Recordar</label>
             </div>
-            
-            <button type="Iniciar sesion" class="btn btn-primary btn-enviar-rock">Iniciar sesion</button>
+
+            <button type="submit" class="btn btn-primary btn-enviar-rock">Iniciar sesión</button>
         </form>
     </div>
 
     <h1><a href="/">volver</a></h1>
 
-
 </body>
-</html> 
+</html>
