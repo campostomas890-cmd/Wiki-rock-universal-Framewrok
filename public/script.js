@@ -27,6 +27,8 @@ function showGlobalBandMessage() {
             window.location.href = '/Breaking_Benjamin';
         } else if (busqueda.includes('slipknot')) {
             window.location.href = '/slipknot';
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
